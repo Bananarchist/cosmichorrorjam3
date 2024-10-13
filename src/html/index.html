@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My First Web Page</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/main.js"></script>
+	<script src="js/audio.js"></script>
+</head>
+<body>
+	<main><button id=init>Start Game</button></main>
+	<script language="javascript">
+		function initElmApp() {
+			var main = document.querySelector('main');
+			return Elm.Main.init(
+				{ node: main, 
+					flags: { width: window.innerWidth, height: window.innerHeight }
+				}
+			);
+		}
+		function initAudio(elmReceiver) {
+			if (window.AudioContext) {
+				return new Audio(window.AudioContext, elmReceiver);
+			}
+		}
+		document.getElementById('init').addEventListener('click', function() {
+			window.cosmicApp = initElmApp();
+			window.cosmicAudio = initAudio(cosmicApp.ports);
+			window.cosmicApp.ports.sendPixelBuffer.subscribe(function(pixelBuffer) {
+				console.log(pixelBuffer);
+			});
+		});
+	</script>
+</body>
+</html>
+
